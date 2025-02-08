@@ -1,4 +1,4 @@
-class PotsController < ApplicationController
+class Api::V1::PotsController < ApplicationController
 
   # GET /pots
   def index
