@@ -1,4 +1,5 @@
 class Api::V1::PotsController < ApplicationController
+  before_action :set_pot, only: [:show, :update, :destroy]
 
   # GET /pots
   def index
@@ -11,6 +12,7 @@ class Api::V1::PotsController < ApplicationController
     render json: @pot
   end
 
+  # POST /pots
   def create
     @pot = Pot.new(pot_params)
 
@@ -32,7 +34,6 @@ class Api::V1::PotsController < ApplicationController
   # DELETE /pots/1
   def destroy
     @pot.destroy
-    
   end
 
   private
@@ -42,6 +43,6 @@ class Api::V1::PotsController < ApplicationController
   end
 
   def pot_params
-    params.require(:pot).permit(:name, :total_saved, :target_amount)
+    params.require(:pot).permit(:name, :total_saved_cents, :target_amount_cents)
   end
 end
