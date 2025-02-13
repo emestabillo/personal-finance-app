@@ -1,29 +1,29 @@
 class Api::V1::PotsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_pot, only: [:show, :update, :destroy]
 
-  # GET /pots
   def index
-    @pots = Pot.all
+    @pots = current_user.pots
     render json: @pots
   end
 
-  # GET /pots/1
   def show
+    @pot = current_user.pots.find(params[:id])
     render json: @pot
   end
 
-  # POST /pots
   def create
-    @pot = Pot.new(pot_params)
+    @pot = current_user.pots.new(pot_params)
 
     if @pot.save
-     render json: @pot, status: :created, location: @pot
+     render json: @pot, status: :created
     else
       render json: @pot.errors, status: :unprocessable_entity
     end
   end
 
   def update
+    @pot = current_user.pots.find(params[:id])
     if @pot.update(pot_params)
       render json: @pot
     else
@@ -31,16 +31,12 @@ class Api::V1::PotsController < ApplicationController
     end
   end
 
-  # DELETE /pots/1
   def destroy
+    @pot = current_user.pots.find(params[:id])
     @pot.destroy
   end
 
   private
-
-  def set_pot
-    @pot = Pot.find(params[:id])
-  end
 
   def pot_params
     params.require(:pot).permit(:name, :total_saved_cents, :target_amount_cents)
