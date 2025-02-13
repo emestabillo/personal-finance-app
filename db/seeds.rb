@@ -7,3 +7,5 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+Pot.create(name: "Italy", total_saved_cents: 3000, target_amount_cents: 9000)
+Pot.create(name: "Savings", total_saved_cents: 100000, target_amount_cents: 100000000)
