@@ -1,16 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { PotProps } from "./components/Pot";
+import Pot from "./components/Pot";
 import ManageFundsModal from "./components/ManageFundsModal";
 import { fetchPots, addMoneyToPot, withdrawMoneyFromPot } from "./utils/potApi";
 
-export interface PotProps {
-  id: number;
-  name: string;
-  total_saved: string;
-  target_amount: string;
-  percentage_saved: number;
-}
 export default function Page() {
   const [pots, setPots] = useState<PotProps[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -98,34 +93,13 @@ export default function Page() {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Your Pots</h1>
       {pots.map((pot) => (
-        <div key={pot.id} className="mb-4 p-4 border border-gray-200 rounded">
-          <h2 className="text-xl font-semibold">{pot.name}</h2>
-          <p>Total Saved: {pot.total_saved}</p>
-          <p>Target Amount: {pot.target_amount}</p>
-          <p>Percentage Saved: {pot.percentage_saved.toFixed(2)}%</p>
-          <div className="mt-2">
-            <button
-              onClick={() => {
-                setSelectedPot(pot);
-                setActionType("add");
-                setIsModalOpen(true);
-              }}
-              className="px-4 py-2 bg-green-500 text-white rounded mr-2 hover:bg-green-600"
-            >
-              Add Money
-            </button>
-            <button
-              onClick={() => {
-                setSelectedPot(pot);
-                setActionType("withdraw");
-                setIsModalOpen(true);
-              }}
-              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-            >
-              Withdraw Money
-            </button>
-          </div>
-        </div>
+        <Pot
+          key={pot.id}
+          pot={pot}
+          setSelectedPot={setSelectedPot}
+          setActionType={setActionType}
+          setIsModalOpen={setIsModalOpen}
+        />
       ))}
 
       <ManageFundsModal
