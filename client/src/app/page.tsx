@@ -1,9 +1,11 @@
-import Signup from "@/components/SignUp";
+// import Register from "@/components/Register";
+import Login from "@/components/LogIn";
 
 export default function Home() {
   return (
     <div>
-      <Signup />
+      {/* <Register /> */}
+      <Login />
     </div>
   );
 }
