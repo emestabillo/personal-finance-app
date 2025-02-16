@@ -9,6 +9,7 @@ import { fetchPots, addMoneyToPot, withdrawMoneyFromPot } from "./utils/potApi";
 export default function Page() {
   const [pots, setPots] = useState<PotProps[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
   const [selectedPot, setSelectedPot] = useState<PotProps | null>(null);
   const [isOpen, setIsModalOpen] = useState(false);
   const [amount, setAmount] = useState<number>(0);
@@ -96,6 +97,8 @@ export default function Page() {
         <Pot
           key={pot.id}
           pot={pot}
+          showOptionsDropdown={showOptionsDropdown}
+          setShowOptionsDropdown={setShowOptionsDropdown}
           setSelectedPot={setSelectedPot}
           setActionType={setActionType}
           setIsModalOpen={setIsModalOpen}

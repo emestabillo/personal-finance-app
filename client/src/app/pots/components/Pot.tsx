@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 export interface PotProps {
   id: number;
   name: string;
@@ -6,11 +8,13 @@ export interface PotProps {
   percentage_saved: number;
 }
 
-interface PotComponentProps {
+export interface PotComponentProps {
   pot: PotProps;
   setSelectedPot: (pot: PotProps) => void;
   setActionType: (action: "add" | "withdraw") => void;
   setIsModalOpen: (isOpen: boolean) => void;
+  showOptionsDropdown: boolean;
+  setShowOptionsDropdown: (isOpen: boolean) => void;
 }
 
 export default function Pot({
@@ -18,10 +22,28 @@ export default function Pot({
   setSelectedPot,
   setActionType,
   setIsModalOpen,
+  showOptionsDropdown,
+  setShowOptionsDropdown,
 }: PotComponentProps) {
   return (
     <div key={pot.id} className="mb-4 p-4 border border-gray-200 rounded">
-      <h2 className="text-xl font-semibold">{pot.name}</h2>
+      <div className="flex justify-between">
+        <h2 className="text-xl font-semibold">{pot.name}</h2>
+        <div className="relative">
+          <button onClick={() => setShowOptionsDropdown(!showOptionsDropdown)}>
+            ...
+          </button>
+          <div
+            className={cn(
+              `absolute border left-[-5rem] max-w-max max-h-0 invisible border-gray-200 bg-white rounded p-2`,
+              { 'visible max-h-[10rem]': showOptionsDropdown }
+            )}
+          >
+            <button className="w-full">Edit pot</button>
+            <button className="w-full">Delete pot</button>
+          </div>
+        </div>
+      </div>
       <p>Total Saved: {pot.total_saved}</p>
       <p>Target Amount: {pot.target_amount}</p>
       <p>Percentage Saved: {pot.percentage_saved.toFixed(2)}%</p>
