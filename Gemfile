@@ -36,6 +36,9 @@ gem "bootsnap", require: false
 gem "rack-cors"
 
 gem 'money-rails', '~> 1.12'
+gem 'devise'
+gem 'devise-jwt'
+gem 'jsonapi-serializer'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

@@ -1,48 +1,45 @@
 class Api::V1::PotsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_pot, only: [:show, :update, :destroy]
 
-  # GET /pots
   def index
-    @pots = Pot.all
-    render json: @pots
+    @pots = current_user.pots
+    render json: PotSerializer.new(@pots).serializable_hash[:data].map { |pot| pot[:attributes] }
   end
 
-  # GET /pots/1
   def show
-    render json: @pot
+    @pot = current_user.pots.find(params[:id])
+    render json: PotSerializer.new(@pot).serializable_hash[:data][:attributes]
   end
 
-  # POST /pots
   def create
-    @pot = Pot.new(pot_params)
+    @pot = current_user.pots.new(pot_params)
 
     if @pot.save
-     render json: @pot, status: :created, location: @pot
+      render json: PotSerializer.new(@pot).serializable_hash[:data][:attributes]
     else
       render json: @pot.errors, status: :unprocessable_entity
     end
   end
 
   def update
+    @pot = current_user.pots.find(params[:id])
     if @pot.update(pot_params)
-      render json: @pot
+      render json: PotSerializer.new(@pot).serializable_hash[:data][:attributes]
     else
       render json: @pot.errors, status: :unprocessable_entity
     end
   end
 
-  # DELETE /pots/1
   def destroy
+    @pot = current_user.pots.find(params[:id])
     @pot.destroy
+    head :no_content
   end
 
   private
 
-  def set_pot
-    @pot = Pot.find(params[:id])
-  end
-
   def pot_params
-    params.require(:pot).permit(:name, :total_saved_cents, :target_amount_cents)
+    params.require(:pot).permit(:name, :total_saved_cents, :target_amount_cents, :user_id)
   end
 end
