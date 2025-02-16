@@ -4,6 +4,7 @@ class Pot < ApplicationRecord
   monetize :target_amount_cents, as: :target_amount
 
   def percentage_saved
-    (total_saved_cents.to_f / target_amount_cents.to_f) * 100
+    return 0 if target_amount_cents.zero?
+   (total_saved_cents.to_f / target_amount_cents) * 100
   end
 end
