@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     }
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      resources :pots do
+      resources :pots, only: [:index, :show, :create, :update, :destroy] do
         member do
           post 'add_money'
           post 'withdraw_money'

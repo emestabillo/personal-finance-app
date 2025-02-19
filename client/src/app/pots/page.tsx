@@ -1,19 +1,22 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { PotProps } from "./components/Pot";
+import { PotProps } from "./types";
 import Pot from "./components/Pot";
-import ManageFundsModal from "./components/ManageFundsModal";
+import ManagePotFundsModal from "./components/ManagePotFundsModal";
 import { fetchPots, addMoneyToPot, withdrawMoneyFromPot } from "./utils/potApi";
+import DeletePotModal from "./components/DeletePotModal";
 
 export default function Page() {
   const [pots, setPots] = useState<PotProps[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
   const [selectedPot, setSelectedPot] = useState<PotProps | null>(null);
-  const [isOpen, setIsModalOpen] = useState(false);
+  const [managePotFundsModalIsOpen, setManagePotFundsModalIsOpen] =
+    useState(false);
   const [amount, setAmount] = useState<number>(0);
   const [actionType, setActionType] = useState<"add" | "withdraw">("add");
+  const [showDeletePotModal, setShowDeletePotModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -79,7 +82,7 @@ export default function Page() {
           ) || null
       );
 
-      setIsModalOpen(false);
+      setManagePotFundsModalIsOpen(false);
       setAmount(0);
     } catch (error) {
       console.error("Error performing action:", error);
@@ -87,12 +90,23 @@ export default function Page() {
     }
   };
 
+  const handleDeleteSuccess = (deletedPotId: number) => {
+    setPots(
+      (prevPots) => prevPots?.filter((pot) => pot.id !== deletedPotId) || null
+    );
+    setShowDeletePotModal(false);
+    setSelectedPot(null);
+  };
+
   if (error) return <div>Error: {error}</div>;
   if (!pots) return <div>Loading...</div>;
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Your Pots</h1>
+      <div>
+        <h1 className="text-2xl font-bold mb-4">Your Pots</h1>
+        <button>+ Add new pot</button>
+      </div>
       {pots.map((pot) => (
         <Pot
           key={pot.id}
@@ -101,19 +115,33 @@ export default function Page() {
           setShowOptionsDropdown={setShowOptionsDropdown}
           setSelectedPot={setSelectedPot}
           setActionType={setActionType}
-          setIsModalOpen={setIsModalOpen}
+          setManagePotFundsModalIsOpen={setManagePotFundsModalIsOpen}
+          showDeletePotModal={showDeletePotModal}
+          setShowDeletePotModal={setShowDeletePotModal}
+          onDeleteSuccess={() => handleDeleteSuccess(pot.id)}
         />
       ))}
 
-      <ManageFundsModal
-        isOpen={isOpen}
-        onClose={() => setIsModalOpen(false)}
+      <ManagePotFundsModal
+        managePotFundsModalIsOpen={managePotFundsModalIsOpen}
+        onClose={() => setManagePotFundsModalIsOpen(false)}
         selectedPot={selectedPot!}
         actionType={actionType}
         amount={amount}
         setAmount={setAmount}
         handleAction={handleAction}
       />
+      {selectedPot && (
+        <DeletePotModal
+          pot={selectedPot}
+          showDeletePotModal={showDeletePotModal}
+          setShowDeletePotModal={setShowDeletePotModal}
+          onDeleteSuccess={() => {
+            handleDeleteSuccess(selectedPot.id);
+            setShowOptionsDropdown(false);
+          }}
+        />
+      )}
     </div>
   );
 }

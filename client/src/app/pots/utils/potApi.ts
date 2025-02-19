@@ -54,3 +54,28 @@ export const withdrawMoneyFromPot = async (
   // console.log(data);
   return data;
 };
+
+export const deletePot = async (potId: number, token: string) => {
+  const response = await fetch(`${API_BASE_URL}/pots/${potId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text(); // Log the error response
+    console.error("Error response:", errorText);
+    throw new Error(`Failed to delete pot: ${errorText}`);
+  }
+  if (response.status === 204) {
+    return null; // or return a success message if you prefer
+  }
+
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return response.json();
+  } else {
+    return null; // or return a success message
+  }
+};

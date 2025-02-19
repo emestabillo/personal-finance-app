@@ -1,21 +1,7 @@
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  selectedPot: {
-    id: number;
-    name: string;
-    total_saved: string;
-    target_amount: string;
-    percentage_saved: number;
-  };
-  actionType: "add" | "withdraw";
-  amount: number;
-  setAmount: (amount: number) => void;
-  handleAction: () => void;
-}
+import { ModalProps } from "../types";
 
-export default function ManageFundsModal({
-  isOpen,
+export default function ManagePotFundsModal({
+  managePotFundsModalIsOpen,
   onClose,
   selectedPot,
   actionType,
@@ -23,7 +9,7 @@ export default function ManageFundsModal({
   setAmount,
   handleAction,
 }: ModalProps) {
-  if (!isOpen) return null;
+  if (!managePotFundsModalIsOpen) return null;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
