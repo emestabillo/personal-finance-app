@@ -1,49 +1,48 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PotProps } from "./types";
 import Pot from "./components/Pot";
 import ManagePotFundsModal from "./components/ManagePotFundsModal";
 import { fetchPots, addMoneyToPot, withdrawMoneyFromPot } from "./utils/potApi";
 import DeletePotModal from "./components/DeletePotModal";
+import AddEditPotModal from "./modals/AddEditPot";
 
 export default function Page() {
   const [pots, setPots] = useState<PotProps[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
-  const [selectedPot, setSelectedPot] = useState<PotProps | null>(null);
+  const [selectedPot, setSelectedPot] = useState<PotProps | undefined>(
+    undefined
+  );
   const [managePotFundsModalIsOpen, setManagePotFundsModalIsOpen] =
     useState(false);
   const [amount, setAmount] = useState<number>(0);
   const [actionType, setActionType] = useState<"add" | "withdraw">("add");
   const [showDeletePotModal, setShowDeletePotModal] = useState(false);
+  const [showAddEditPot, setShowAddEditPot] = useState(false);
+  const [addOrEditModal, setAddOrEditModal] = useState<"add" | "edit">("add");
+  const [colorTag, setColorTag] = useState("");
+  const [targetAmount, setTargetAmount] = useState("");
   const router = useRouter();
 
-  useEffect(() => {
+  const fetchData = async () => {
     const token = localStorage.getItem("token");
-
     if (!token) {
       setError("No authentication token found. Please log in.");
-      router.push("/");
       return;
     }
 
-    const fetchData = async () => {
-      try {
-        const data = await fetchPots(token);
-        setPots(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError(error instanceof Error ? error.message : String(error));
-        if (
-          error instanceof Error &&
-          error.message.includes("Authentication failed")
-        ) {
-          router.push("/");
-        }
-      }
-    };
+    try {
+      const pots = await fetchPots(token);
+      setPots(pots);
+    } catch (error) {
+      console.error("Error fetching pots:", error);
+      setError(error instanceof Error ? error.message : String(error));
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [router]);
 
@@ -90,12 +89,25 @@ export default function Page() {
     }
   };
 
+  const onAddEditSuccess = () => {
+    setShowAddEditPot(false);
+    setTargetAmount("");
+    setColorTag("");
+    fetchData(); // Refetch pots from the backend
+  };
+
   const handleDeleteSuccess = (deletedPotId: number) => {
     setPots(
       (prevPots) => prevPots?.filter((pot) => pot.id !== deletedPotId) || null
     );
     setShowDeletePotModal(false);
-    setSelectedPot(null);
+    setSelectedPot(undefined);
+  };
+
+  const handleAddPotModal = () => {
+    setAddOrEditModal("add");
+    setShowAddEditPot(!showAddEditPot);
+    setSelectedPot(undefined);
   };
 
   if (error) return <div>Error: {error}</div>;
@@ -105,7 +117,7 @@ export default function Page() {
     <div className="p-6">
       <div>
         <h1 className="text-2xl font-bold mb-4">Your Pots</h1>
-        <button>+ Add new pot</button>
+        <button onClick={handleAddPotModal}>+ Add new pot</button>
       </div>
       {pots.map((pot) => (
         <Pot
@@ -121,7 +133,17 @@ export default function Page() {
           onDeleteSuccess={() => handleDeleteSuccess(pot.id)}
         />
       ))}
-
+      <AddEditPotModal
+        pot={selectedPot} // `selectedPot` can be `undefined`
+        addOrEditModal={addOrEditModal}
+        targetAmount={targetAmount}
+        setTargetAmount={setTargetAmount}
+        showAddEditPot={showAddEditPot}
+        setShowAddEditPot={setShowAddEditPot}
+        colorTag={colorTag}
+        setColorTag={setColorTag}
+        onAddEditSuccess={onAddEditSuccess}
+      />
       <ManagePotFundsModal
         managePotFundsModalIsOpen={managePotFundsModalIsOpen}
         onClose={() => setManagePotFundsModalIsOpen(false)}

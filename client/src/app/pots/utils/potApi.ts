@@ -55,6 +55,35 @@ export const withdrawMoneyFromPot = async (
   return data;
 };
 
+export const addPot = async (
+  name: string,
+  target_amount: number,
+  token: string
+) => {
+  const response = await fetch(`${API_BASE_URL}/pots`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${token}`,
+    },
+    body: JSON.stringify({
+      pot: {
+        name: name,
+        amount: target_amount,
+      },
+    }),
+  });
+  if (!response.ok) {
+    const errorText = await response.json(); // Log the error response
+    console.error("Error response:", errorText);
+    throw new Error(`Failed to add pot: ${errorText}`);
+  } else {
+    const data = await response.json();
+    console.log("Backend response:", data);
+    return data;
+  }
+};
+
 export const deletePot = async (potId: number, token: string) => {
   const response = await fetch(`${API_BASE_URL}/pots/${potId}`, {
     method: "DELETE",
