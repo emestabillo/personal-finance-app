@@ -68,8 +68,8 @@ export const addPot = async (
     },
     body: JSON.stringify({
       pot: {
-        name: name,
-        amount: target_amount,
+        name,
+        target_amount_cents: Math.round(target_amount * 100), // Convert dollars to cents
       },
     }),
   });
