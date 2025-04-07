@@ -37,3 +37,15 @@ export interface ModalProps {
   setAmount: (amount: number) => void;
   handleAction: () => void;
 }
+
+export interface AddEditPotProps {
+  pot?: PotProps;
+  addOrEditModal: "add" | "edit";
+  targetAmount: string;
+  setTargetAmount: (amount: string) => void;
+  showAddEditPot: boolean;
+  setShowAddEditPot: (show: boolean) => void;
+  colorTag: string;
+  setColorTag: (color: string) => void;
+  onAddEditSuccess: () => void;
+}

@@ -1,0 +1,30 @@
+export const colorOptions = [
+  { key: "green", label: "green" },
+  { key: "yellow", label: "yellow" },
+  { key: "cyan", label: "cyan" },
+  { key: "navy", label: "navy" },
+  { key: "red", label: "red" },
+  { key: "purple", label: "purple" },
+  { key: "turquoise", label: "turquoise" },
+  { key: "brown", label: "brown" },
+  { key: "magenta", label: "magenta" },
+  { key: "blue", label: "blue" },
+  { key: "navyGray", label: "navy gray" },
+  { key: "armyGreen", label: "army green" },
+  { key: "pink", label: "pink" },
+  { key: "gold", label: "gold" },
+  { key: "orange", label: "orange" },
+];
+
+export const budgetCategories = [
+  { key: "entertainment", label: "Entertainment" },
+  { key: "bills", label: "Bills" },
+  { key: "groceries", label: "Groceries" },
+  { key: "diningOut", label: "Dining Out" },
+  { key: "transportation", label: "Transportation" },
+  { key: "personalCare", label: "Personal Care" },
+  { key: "education", label: "Education" },
+  { key: "lifestyle", label: "Lifestyle" },
+  { key: "shopping", label: "Shopping" },
+  { key: "general", label: "General" },
+];
