@@ -47,9 +47,13 @@ const schema = z
     path: ["confirmPassword"],
   });
 
+interface RegisterProps {
+  onToggle: () => void;
+}
+
 type SignupValidationSchemaType = z.infer<typeof schema>;
 
-export default function Register() {
+export default function Register({ onToggle }: RegisterProps) {
   const [serverError, setServerError] = useState<string | null>(null);
 
   const {
@@ -124,6 +128,12 @@ export default function Register() {
         <button className="border solid" type="submit">
           Sign Up
         </button>
+        <p>
+          Already have an account?{" "}
+          <button className="text-blue-500" onClick={onToggle}>
+            Log In
+          </button>
+        </p>
       </form>
     </div>
   );

@@ -1,11 +1,9 @@
-// import Register from "@/components/Register";
-import Login from "@/components/LogIn";
+import Auth from "@/components/Auth";
 
 export default function Home() {
   return (
-    <div>
-      {/* <Register /> */}
-      <Login />
-    </div>
+    <>
+      <Auth />
+    </>
   );
 }

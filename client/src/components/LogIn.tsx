@@ -16,10 +16,13 @@ const schema = z.object({
       }),
   }),
 });
+interface LoginProps {
+  onToggle: () => void;
+}
 
 type SignupValidationSchemaType = z.infer<typeof schema>;
 
-export default function Login() {
+export default function Login({ onToggle }: LoginProps) {
   const [serverError, setServerError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -92,6 +95,12 @@ export default function Login() {
           Log In
         </button>
       </form>
+      <p>
+        Need to create an account?{" "}
+        <button className="text-blue-500" onClick={onToggle}>
+          Sign Up
+        </button>
+      </p>
     </div>
   );
 }
