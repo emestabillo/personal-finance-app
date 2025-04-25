@@ -29,3 +29,45 @@ Pot.create!(
 )
 Pot.create!(name: "Italy", total_saved_cents: 30000, target_amount_cents: 900000, user: user2)
 Pot.create!(name: "Savings", total_saved_cents: 3200028, target_amount_cents: 10000000, user: user1)
+
+transactions = [
+  # User1 transactions
+  {
+    recipient_sender: "Whole Foods",
+    amount_dollars: 85.25,
+    category: "Groceries",
+    transaction_type: "expense",
+    transaction_date: Date.current - 2.days,
+    user: user1
+  },
+  {
+    recipient_sender: "Freelance Payment",
+    amount_dollars: 1200.00,
+    category: "General",
+    transaction_type: "income",
+    transaction_date: Date.current - 5.days,
+    user: user1
+  },
+  # User2 transactions
+  {
+    recipient_sender: "Netflix",
+    amount_dollars: 15.99,
+    category: "Entertainment",
+    transaction_type: "expense",
+    transaction_date: Date.current - 1.day,
+    user: user2
+  },
+  {
+    recipient_sender: "Salary Deposit",
+    amount_dollars: 2500.00,
+    category: "General",
+    transaction_type: "income",
+    transaction_date: Date.current.beginning_of_month,
+    user: user2
+  }
+]
+
+# Create all transactions
+transactions.each do |attrs|
+  Transaction.create!(attrs)
+end
