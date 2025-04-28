@@ -43,24 +43,26 @@ const items = [
 
 export function AppSidebar() {
   return (
-    <Sidebar collapsible="icon" variant="sidebar" side="left">
-      <SidebarContent>
+    <Sidebar collapsible="icon" className="h-auto">
+      <SidebarContent className="px-[5%] pt-2 md:w-auto">
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
+          <SidebarGroupLabel className="hidden md:block">
+            Finance
+          </SidebarGroupLabel>
+          <SidebarGroupContent className="w-fit">
+            <SidebarMenu className="justify-between md:justify-normal">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>
                       <item.icon />
-                      <span>{item.title}</span>
+                      <span className="hidden sm:block">{item.title}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
-            <SidebarTrigger className="mt-auto" />
+            <SidebarTrigger className="hidden md:flex mt-auto" />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

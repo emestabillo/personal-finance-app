@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+@theme {
+  --breakpoint-sm: 30rem; /*480px*/
+  --breakpoint-md: 48rem; /*768px*/
+  --breakpoint-lg: 64rem; /*1024px*/
+  /* Beige */
+  --color-beige-500: hsl(23, 6%, 57%);
+  --color-beige-100: hsl(30, 36%, 96%);
+  /* Gray */
+  --color-gray-900: hsl(252, 7%, 13%);
+  --color-gray-500: hsl(0, 0%, 41%);
+  --color-gray-300: hsl(0, 0%, 70%);
+  --color-gray-100: hsl(0, 0%, 95%);
+  --color-white: hsl(0, 0%, 100%);
+  /* Secondary colors */
+  --color-green: hsl(177, 52%, 32%);
+  --color-yellow: hsl(28, 73%, 81%);
+  --color-cyan: hsl(190, 52%, 68%);
+  --color-navy: hsl(248, 8%, 41%);
+  --color-red: hsl(7, 58%, 50%);
+  --color-purple: hsl(259, 30%, 56%);
+  /* Tertiary colors */
+}
+
 :root {
   /* --background: #ffffff;
   --foreground: #171717; */
@@ -20,10 +43,10 @@ body {
   font-family: var(--ff-public-sans);
 }
 
-
-
 @layer base {
   :root {
+    /* --gray-900: 252 7% 13%;
+    --gray-500 */
     --background: 0 0% 100%;
     --foreground: 224 71.4% 4.1%;
     --card: 0 0% 100%;
@@ -93,8 +116,6 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
-
-
 
 @layer base {
   * {
