@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,13 +17,10 @@ const schema = z.object({
       }),
   }),
 });
-interface LoginProps {
-  onToggle: () => void;
-}
 
 type SignupValidationSchemaType = z.infer<typeof schema>;
 
-export default function Login({ onToggle }: LoginProps) {
+export default function Login() {
   const [serverError, setServerError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -97,9 +95,9 @@ export default function Login({ onToggle }: LoginProps) {
       </form>
       <p>
         Need to create an account?{" "}
-        <button className="text-blue-500" onClick={onToggle}>
+        <Link href="/signup" className="text-blue-500">
           Sign Up
-        </button>
+        </Link>
       </p>
     </div>
   );

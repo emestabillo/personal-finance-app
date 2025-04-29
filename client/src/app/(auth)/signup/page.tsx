@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,13 +48,9 @@ const schema = z
     path: ["confirmPassword"],
   });
 
-interface RegisterProps {
-  onToggle: () => void;
-}
-
 type SignupValidationSchemaType = z.infer<typeof schema>;
 
-export default function Register({ onToggle }: RegisterProps) {
+export default function Register() {
   const [serverError, setServerError] = useState<string | null>(null);
 
   const {
@@ -130,9 +127,9 @@ export default function Register({ onToggle }: RegisterProps) {
         </button>
         <p>
           Already have an account?{" "}
-          <button className="text-blue-500" onClick={onToggle}>
-            Log In
-          </button>
+          <Link href="/login" className="text-blue-500">
+            Login
+          </Link>
         </p>
       </form>
     </div>

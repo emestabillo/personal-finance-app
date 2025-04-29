@@ -1,6 +1,6 @@
 "use client";
 
-import { TransactionProps } from "./ttransactionTypes";
+import { TransactionProps } from "./transactionTypes";
 import {
   Table,
   TableBody,
