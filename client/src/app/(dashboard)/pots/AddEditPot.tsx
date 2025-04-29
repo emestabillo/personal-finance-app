@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { AddEditPotProps } from "../types";
-import { colorOptions, budgetCategories } from "../utils/dropdownData";
+import { AddEditPotProps } from "./potTypes";
+import { colorOptions, budgetCategories } from "./dropdownData";
 import { cn } from "@/lib/utils";
-import { addPot } from "../utils/potApi";
+import { addPot } from "./potApi";
 
 export default function AddEditPotModal({
   pot = {

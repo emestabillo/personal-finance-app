@@ -1,4 +1,4 @@
-import { ModalProps } from "../types";
+import { ModalProps } from "./potTypes";
 
 export default function ManagePotFundsModal({
   managePotFundsModalIsOpen,

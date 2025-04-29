@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { PotProps } from "./types";
-import Pot from "./components/Pot";
-import ManagePotFundsModal from "./components/ManagePotFundsModal";
-import { fetchPots, addMoneyToPot, withdrawMoneyFromPot } from "./utils/potApi";
-import DeletePotModal from "./components/DeletePotModal";
-import AddEditPotModal from "./modals/AddEditPot";
+import { PotProps } from "./potTypes";
+import Pot from "./Pot";
+import ManagePotFundsModal from "./ManagePotFundsModal";
+import { fetchPots, addMoneyToPot, withdrawMoneyFromPot } from "./potApi";
+import DeletePotModal from "./DeletePotModal";
+import AddEditPotModal from "./AddEditPot";
 
 export default function Page() {
   const [pots, setPots] = useState<PotProps[] | null>(null);

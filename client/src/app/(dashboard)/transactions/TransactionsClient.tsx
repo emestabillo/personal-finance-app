@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useAuthenticatedFetch } from "@/hooks/useAuthenticatedFetch";
-import { fetchTransactions } from "./TransactionApi";
+import { fetchTransactions } from "./ttransactionApi";
 import TransactionTable from "./TransactionTable";
 
 export default function TransactionsClient() {

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { ManagePotFundsProps, DeletePotModalProps } from "../types";
+import { ManagePotFundsProps, DeletePotModalProps } from "./potTypes";
 
 export default function Pot({
   pot,

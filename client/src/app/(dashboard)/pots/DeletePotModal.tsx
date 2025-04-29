@@ -1,5 +1,5 @@
-import { DeletePotModalProps } from "../types";
-import { deletePot } from "../utils/potApi";
+import { DeletePotModalProps } from "./potTypes";
+import { deletePot } from "./potApi";
 import { cn } from "@/lib/utils";
 
 export default function DeletePotModal({
