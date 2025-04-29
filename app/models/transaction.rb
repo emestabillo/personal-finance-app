@@ -3,7 +3,7 @@ class Transaction < ApplicationRecord
   monetize :amount_cents, numericality: {greater_than:0}
   
   # Transaction type (required)
-  enum transaction_type: {income: 0, expense: 1}
+  enum transaction_type: { income: "income", expense: "expense" }
 
   # Categories from dropdown
   CATEGORIES = [
