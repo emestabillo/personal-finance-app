@@ -20,8 +20,8 @@ export default function TransactionTable({
 }: TransactionTableProps) {
   return (
     <>
-      <TableCaption>Latest Transaction List</TableCaption>
       <Table>
+        <TableCaption>Latest Transaction List</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Recipient/Sender</TableHead>

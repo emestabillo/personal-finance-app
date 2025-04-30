@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { PotProps } from "./potTypes";
 import Pot from "./Pot";
 import ManagePotFundsModal from "./ManagePotFundsModal";
@@ -114,56 +115,58 @@ export default function Page() {
   if (!pots) return <div>Loading...</div>;
 
   return (
-    <div className="p-6">
-      <div>
-        <h1 className="text-2xl font-bold mb-4">Your Pots</h1>
-        <button onClick={handleAddPotModal}>+ Add new pot</button>
+    <ProtectedRoute>
+      <div className="p-6">
+        <div>
+          <h1 className="text-2xl font-bold mb-4">Your Pots</h1>
+          <button onClick={handleAddPotModal}>+ Add new pot</button>
+        </div>
+        {pots.map((pot) => (
+          <Pot
+            key={pot.id}
+            pot={pot}
+            showOptionsDropdown={showOptionsDropdown}
+            setShowOptionsDropdown={setShowOptionsDropdown}
+            setSelectedPot={setSelectedPot}
+            setActionType={setActionType}
+            setManagePotFundsModalIsOpen={setManagePotFundsModalIsOpen}
+            showDeletePotModal={showDeletePotModal}
+            setShowDeletePotModal={setShowDeletePotModal}
+            onDeleteSuccess={() => handleDeleteSuccess(pot.id)}
+          />
+        ))}
+        <AddEditPotModal
+          pot={selectedPot} // `selectedPot` can be `undefined`
+          addOrEditModal={addOrEditModal}
+          targetAmount={targetAmount}
+          setTargetAmount={setTargetAmount}
+          showAddEditPot={showAddEditPot}
+          setShowAddEditPot={setShowAddEditPot}
+          colorTag={colorTag}
+          setColorTag={setColorTag}
+          onAddEditSuccess={onAddEditSuccess}
+        />
+        <ManagePotFundsModal
+          managePotFundsModalIsOpen={managePotFundsModalIsOpen}
+          onClose={() => setManagePotFundsModalIsOpen(false)}
+          selectedPot={selectedPot!}
+          actionType={actionType}
+          amount={amount}
+          setAmount={setAmount}
+          handleAction={handleAction}
+        />
+        {selectedPot && (
+          <DeletePotModal
+            pot={selectedPot}
+            showDeletePotModal={showDeletePotModal}
+            setShowDeletePotModal={setShowDeletePotModal}
+            onDeleteSuccess={() => {
+              handleDeleteSuccess(selectedPot.id);
+              setShowOptionsDropdown(false);
+            }}
+          />
+        )}
       </div>
-      {pots.map((pot) => (
-        <Pot
-          key={pot.id}
-          pot={pot}
-          showOptionsDropdown={showOptionsDropdown}
-          setShowOptionsDropdown={setShowOptionsDropdown}
-          setSelectedPot={setSelectedPot}
-          setActionType={setActionType}
-          setManagePotFundsModalIsOpen={setManagePotFundsModalIsOpen}
-          showDeletePotModal={showDeletePotModal}
-          setShowDeletePotModal={setShowDeletePotModal}
-          onDeleteSuccess={() => handleDeleteSuccess(pot.id)}
-        />
-      ))}
-      <AddEditPotModal
-        pot={selectedPot} // `selectedPot` can be `undefined`
-        addOrEditModal={addOrEditModal}
-        targetAmount={targetAmount}
-        setTargetAmount={setTargetAmount}
-        showAddEditPot={showAddEditPot}
-        setShowAddEditPot={setShowAddEditPot}
-        colorTag={colorTag}
-        setColorTag={setColorTag}
-        onAddEditSuccess={onAddEditSuccess}
-      />
-      <ManagePotFundsModal
-        managePotFundsModalIsOpen={managePotFundsModalIsOpen}
-        onClose={() => setManagePotFundsModalIsOpen(false)}
-        selectedPot={selectedPot!}
-        actionType={actionType}
-        amount={amount}
-        setAmount={setAmount}
-        handleAction={handleAction}
-      />
-      {selectedPot && (
-        <DeletePotModal
-          pot={selectedPot}
-          showDeletePotModal={showDeletePotModal}
-          setShowDeletePotModal={setShowDeletePotModal}
-          onDeleteSuccess={() => {
-            handleDeleteSuccess(selectedPot.id);
-            setShowOptionsDropdown(false);
-          }}
-        />
-      )}
-    </div>
+    </ProtectedRoute>
   );
 }
