@@ -13,22 +13,23 @@ const schema = z.object({
       .string()
       .min(6, { message: "Password must be at least 6 characters" })
       .max(16, {
-        message: "Password must not be longer than 16 characters",
+        message: "Password must not exceed 16 characters",
       }),
   }),
 });
 
-type SignupValidationSchemaType = z.infer<typeof schema>;
+type LoginFormData = z.infer<typeof schema>;
 
-export default function Login() {
+export default function LoginPage() {
   const [serverError, setServerError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupValidationSchemaType>({
+  } = useForm<LoginFormData>({
     resolver: zodResolver(schema),
   });
 
@@ -61,12 +62,19 @@ export default function Login() {
     } catch (error) {
       console.error("Login error:", error);
       setServerError("An error occurred. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div>
       <h1>Sign In</h1>
+      {serverError && (
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+          {serverError}
+        </div>
+      )}
       <form onSubmit={handleSubmit(onSignInSubmit)}>
         <div>
           <label htmlFor="email">Email</label>
@@ -75,6 +83,7 @@ export default function Login() {
             id="email"
             {...register("user.email")}
             className="border solid"
+            disabled={isSubmitting}
           />
           {errors.user?.email && <p>{errors.user?.email.message}</p>}
           {serverError && <p className="text-red-500">{serverError}</p>}
@@ -86,11 +95,12 @@ export default function Login() {
             id="password"
             {...register("user.password")}
             className="border solid"
+            disabled={isSubmitting}
           />
           {errors.user?.password && <p>{errors.user?.password.message}</p>}
         </div>
         <button className="border solid" type="submit">
-          Log In
+          {isSubmitting ? "Signing in..." : "Sign In"}
         </button>
       </form>
       <p>

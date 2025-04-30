@@ -4,7 +4,7 @@ import { TransactionProps } from "./transactionTypes";
 import {
   Table,
   TableBody,
-  TableCaption,
+  // TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -20,7 +20,7 @@ export default function TransactionTable({
 }: TransactionTableProps) {
   return (
     <>
-      <TableCaption>Latest Transaction List</TableCaption>
+      {/* <TableCaption>Latest Transaction List</TableCaption> */}
       <Table>
         <TableHeader>
           <TableRow>
