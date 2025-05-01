@@ -1,9 +1,13 @@
 import React from "react";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
-export default function Dashboard() {
+export default function DashboardPage() {
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Financial Dashboard</h1>
-    </div>
+    <ProtectedRoute>
+      <div>
+        <h1>Dashboard</h1>
+        {/* Dashboard content */}
+      </div>
+    </ProtectedRoute>
   );
 }

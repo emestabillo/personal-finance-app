@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Public_Sans } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider } from "../context/AuthContext";
 
 const publicSans = Public_Sans({
   variable: "--ff-public-sans",
@@ -21,7 +21,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${publicSans.variable} antialiased`}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <main className="w-full">{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );

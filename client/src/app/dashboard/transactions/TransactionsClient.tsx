@@ -1,20 +1,20 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useAuthenticatedFetch } from "@/hooks/useAuthenticatedFetch";
+import { useFetch } from "@/hooks/useFetch";
 import { fetchTransactions } from "./transactionApi";
 import TransactionTable from "./TransactionTable";
+import { useAuth } from "@/context/AuthContext";
 
 export default function TransactionsClient() {
-  const router = useRouter();
-  const {
-    data: transactions,
-    error,
-    loading,
-  } = useAuthenticatedFetch(fetchTransactions, [router]);
+  const { token } = useAuth();
+
+  const { data, loading, error } = useFetch(() => {
+    if (!token) throw new Error("Authentication required");
+    return fetchTransactions(token);
+  }, [token]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
-  return <TransactionTable transactions={transactions || []} />;
+  return <TransactionTable transactions={data || []} />;
 }

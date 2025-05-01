@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "@/context/AuthContext";
 
 const schema = z.object({
   user: z.object({
@@ -22,7 +22,7 @@ type SignupValidationSchemaType = z.infer<typeof schema>;
 
 export default function Login() {
   const [serverError, setServerError] = useState<string | null>(null);
-  const router = useRouter();
+  const { login } = useAuth();
 
   const {
     register,
@@ -50,8 +50,7 @@ export default function Login() {
         setServerError(null);
         const token = res.headers.get("Authorization");
         if (token) {
-          localStorage.setItem("token", token);
-          router.push("/pots");
+          login(token);
         } else {
           setServerError("No authorization token received");
         }
