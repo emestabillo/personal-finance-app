@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Public_Sans } from "next/font/google";
 import "./globals.css";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { cookies } from "next/headers";
+import { AuthProvider } from "../context/AuthContext";
 
 const publicSans = Public_Sans({
   variable: "--ff-public-sans",
@@ -20,15 +18,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
   return (
     <html lang="en">
       <body className={`${publicSans.variable} antialiased`}>
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <AppSidebar />
+        <AuthProvider>
           <main className="w-full">{children}</main>
-        </SidebarProvider>
+        </AuthProvider>
       </body>
     </html>
   );

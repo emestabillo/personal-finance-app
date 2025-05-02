@@ -1,5 +1,6 @@
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import Link from "next/link";
 
 import {
   Sidebar,
@@ -16,27 +17,27 @@ import {
 const items = [
   {
     title: "Overview",
-    url: "/",
+    url: "/dashboard",
     icon: Home,
   },
   {
     title: "Transactions",
-    url: "/transactions",
+    url: "/dashboard/transactions",
     icon: Inbox,
   },
   {
     title: "Budgets",
-    url: "#",
+    url: "/dashboard/budgets",
     icon: Calendar,
   },
   {
     title: "Pots",
-    url: "/pots",
+    url: "/dashboard/pots",
     icon: Search,
   },
   {
     title: "Recurring Bills",
-    url: "#",
+    url: "/dashboard/recurring-bills",
     icon: Settings,
   },
 ];
@@ -54,10 +55,10 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span className="hidden sm:block">{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
