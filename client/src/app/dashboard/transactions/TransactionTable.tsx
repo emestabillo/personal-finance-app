@@ -1,6 +1,6 @@
 "use client";
 
-import { TransactionProps } from "./transactionTypes";
+import { Transaction } from "./transactionTypes";
 import {
   Table,
   TableBody,
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 
 interface TransactionTableProps {
-  transactions: TransactionProps[];
+  transactions: Transaction[];
 }
 
 export default function TransactionTable({

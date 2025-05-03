@@ -90,7 +90,7 @@ class Api::V1::PotsController < ApplicationController
   end
 
   def pot_params
-    params.require(:pot).permit(:name, :total_saved_cents, :target_amount_cents, :user_id)
+    params.require(:pot).permit(:name, :total_saved_cents, :target_amount_cents)
   end
 
   def serialize_pot(pot)
