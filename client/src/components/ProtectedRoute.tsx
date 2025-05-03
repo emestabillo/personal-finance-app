@@ -18,8 +18,8 @@ export default function ProtectedRoute({
     }
   }, [isAuthenticated, isLoading, router]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || !isAuthenticated) {
+    return <div>Loading authentication status...</div>;
   }
 
   return isAuthenticated ? children : null;

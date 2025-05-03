@@ -26,24 +26,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    // Check for token on initial load
-    const storedToken = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
-    setToken(storedToken);
-    setIsLoading(false);
-  }, []);
+    const checkAuth = async () => {
+      const storedToken = localStorage.getItem("token");
 
-  const login = (token: string) => {
-    localStorage.setItem("token", token);
+      if (storedToken) {
+        setIsAuthenticated(true);
+        setToken(storedToken);
+      } else {
+        // Only redirect if we're not already on the login page
+        if (!window.location.pathname.startsWith("/login")) {
+          router.push("/login");
+        }
+      }
+
+      setIsLoading(false);
+    };
+
+    checkAuth();
+  }, [router]);
+
+  const login = (newToken: string) => {
+    localStorage.setItem("token", newToken);
     setIsAuthenticated(true);
-    setToken(token);
-    // router.push("/dashboard");
-    setTimeout(() => router.push("/dashboard"), 0); // Optional: ensures state is set
+    setToken(newToken);
+    router.push("/dashboard");
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
+    setToken(null);
     router.push("/login");
   };
 
@@ -57,22 +69,3 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
-// "use client";
-
-// import { createContext, useContext } from "react";
-
-// type AuthContextType = {
-//   token: string | null;
-//   setToken: (token: string | null) => void;
-//   isAuthenticated: boolean;
-//   loading: boolean;
-// };
-
-// export const AuthContext = createContext<AuthContextType>({
-//   token: null,
-//   setToken: () => {},
-//   isAuthenticated: false,
-//   loading: true,
-// });
-
-// export const useAuth = () => useContext(AuthContext);
