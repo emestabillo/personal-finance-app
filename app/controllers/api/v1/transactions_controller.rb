@@ -3,14 +3,18 @@ class Api::V1::TransactionsController < ApplicationController
 
   def index
     @transactions = current_user.transactions
-    render json: @transactions
+    render json: @transactions.as_json(
+      methods: [:amount_dollars, :formatted_amount]
+    )
   end
 
   def create
     @transaction = current_user.transactions.new(transaction_params)
 
     if @transaction.save
-        render json: @transaction, status: :created
+        render json: @transaction.as_json(
+          methods: [:amount_dollars, :formatted_amount]
+        ), status: :created
     else
       render json: { error: @transaction.errors.full_messages }, status: :unprocessable_entity
     end
@@ -19,6 +23,6 @@ class Api::V1::TransactionsController < ApplicationController
   private
 
   def transaction_params
-    params.require(:transaction).permit(:recipient_sender, :category, :transaction_date, :amount_cents, :transaction_type)
+    params.require(:transaction).permit(:recipient_sender, :category, :transaction_date, :amount_dollars, :transaction_type)
   end
 end

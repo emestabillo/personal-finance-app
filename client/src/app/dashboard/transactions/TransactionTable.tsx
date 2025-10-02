@@ -43,7 +43,7 @@ export default function TransactionTable({
               category,
               transaction_date,
               transaction_type,
-              amount_cents,
+              amount_dollars,
             } = txn;
             return (
               <TableRow key={id}>
@@ -52,7 +52,7 @@ export default function TransactionTable({
                 <TableCell>{transaction_date}</TableCell>
                 <TableCell>
                   {transaction_type === "expense" ? "-" : "+"}
-                  {amount_cents}
+                  {amount_dollars}
                 </TableCell>
               </TableRow>
             );

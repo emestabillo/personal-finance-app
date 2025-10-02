@@ -3,6 +3,7 @@ import { TransactionFormInput } from "./transactionTypes";
 const API_BASE_URL = "http://localhost:4000/api/v1"; // Include /api/v1
 
 export const fetchTransactions = async (token: string) => {
+  // console.trace("fetchTransactions called from:");
   const response = await fetch(`${API_BASE_URL}/transactions`, {
     method: "GET",
     headers: {
@@ -38,7 +39,7 @@ export const createTransaction = async (
         recipient_sender: formData.recipient_sender,
         category: formData.category,
         transaction_date: formData.date,
-        amount_cents: Math.round(parseFloat(formData.amount_cents) * 100),
+        amount_dollars: parseFloat(formData.amount_dollars),
         transaction_type: formData.transaction_type,
       },
     }),

@@ -20,16 +20,7 @@ export interface Transaction {
   recipient_sender: string;
   category: TransactionCategory;
   transaction_date: string;
-  amount_cents: string;
-  transaction_type: "income" | "expense";
-}
-
-// For form input values
-export interface TransactionFormInput {
-  recipient_sender: string;
-  category: TransactionCategory;
-  date: string;
-  amount_cents: string; // User enters as string (e.g., "10.99")
+  amount_dollars: string;
   transaction_type: "income" | "expense";
 }
 
@@ -38,7 +29,7 @@ export interface TransactionCreatePayload {
   recipient_sender: string;
   category: TransactionCategory;
   date: string;
-  amount_cents: number; // Converted to cents (e.g., 1099)
+  amount_dollars: number; // Converted to cents (e.g., 1099)
   transaction_type: "income" | "expense";
 }
 
@@ -52,11 +43,11 @@ export const transactionFormSchema = z.object({
     { required_error: "Please select a category" }
   ),
   date: z.string().min(1, "Date is required"),
-  amount_cents: z
+  amount_dollars: z
     .string()
     .min(1, "Amount is required")
     .regex(/^\d+(\.\d{1,2})?$/, "Must be a valid dollar amount"),
   transaction_type: z.enum(["income", "expense"]),
 });
 
-export type TransactionFormValues = z.infer<typeof transactionFormSchema>;
+export type TransactionFormInput = z.infer<typeof transactionFormSchema>;

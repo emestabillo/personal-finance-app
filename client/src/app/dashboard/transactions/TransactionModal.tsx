@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  TransactionFormValues,
   transactionFormSchema,
   TransactionFormInput,
 } from "./transactionTypes";
@@ -45,25 +44,25 @@ export default function TransactionModal({
   const [open, setOpen] = useState(false);
   const { token } = useAuth();
 
-  const form = useForm<TransactionFormValues>({
+  const form = useForm<TransactionFormInput>({
     resolver: zodResolver(transactionFormSchema),
     defaultValues: {
       recipient_sender: "",
       category: "General",
       date: new Date().toISOString().split("T")[0],
-      amount_cents: "",
+      amount_dollars: "",
       transaction_type: "expense",
     },
   });
 
-  const onSubmit = async (formValues: TransactionFormValues) => {
+  const onSubmit = async (formValues: TransactionFormInput) => {
     try {
       // Convert form values to the expected API format
       const formData: TransactionFormInput = {
         recipient_sender: formValues.recipient_sender,
         category: formValues.category,
         date: formValues.date,
-        amount_cents: formValues.amount_cents, // As string from form
+        amount_dollars: formValues.amount_dollars, // As string from form
         transaction_type: formValues.transaction_type,
       };
 
@@ -151,7 +150,7 @@ export default function TransactionModal({
             />
             <FormField
               control={form.control}
-              name="amount_cents"
+              name="amount_dollars"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Amount</FormLabel>

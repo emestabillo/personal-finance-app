@@ -20,7 +20,7 @@ class Transaction < ApplicationRecord
 
   # Convert cents back to dollars for display
   def amount_dollars
-    amount_cents.to_f / 1000
+    amount_cents.to_f / 100
   end
 
   # Signed amount for calculations (income: +, expense: -)
@@ -29,7 +29,7 @@ class Transaction < ApplicationRecord
   end
 
   # Formatted display (e.g. "+$500.00" or "-$20.50")
-  def formatted amount
+  def formatted_amount
     "#{income? ? '+' : '-'}#{amount.format}"
   end
 end
