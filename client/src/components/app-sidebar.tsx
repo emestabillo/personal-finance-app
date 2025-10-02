@@ -46,11 +46,11 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="h-auto">
       <SidebarContent className="px-[5%] pt-2 md:w-auto">
-        <SidebarGroup>
+        <SidebarGroup className="lg:h-full">
           <SidebarGroupLabel className="hidden md:block">
             Finance
           </SidebarGroupLabel>
-          <SidebarGroupContent className="w-fit">
+          <SidebarGroupContent className="w-fit lg:flex-1 lg:flex lg:flex-col lg:justify-between">
             <SidebarMenu className="justify-between md:justify-normal">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
@@ -63,7 +63,7 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
-            <SidebarTrigger className="hidden md:flex mt-auto" />
+            <SidebarTrigger className="hidden lg:flex mt-auto w-full" />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
