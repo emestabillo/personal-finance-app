@@ -9,7 +9,7 @@ class Transaction < ApplicationRecord
   CATEGORIES = [
     'Entertainment', 'Bills', 'Groceries', 'Dining Out', 'Transportation', 'Personal Care', 'General'].freeze
 
-  validates :recipient_sender, :transaction_date, :category, presence: true
+  validates :recipient_or_sender, :transaction_date, :category, presence: true
   validates :category, inclusion: {in: CATEGORIES}
   validates :transaction_type, presence: true
   

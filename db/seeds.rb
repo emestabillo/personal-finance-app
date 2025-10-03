@@ -33,7 +33,7 @@ Pot.create!(name: "Savings", total_saved_cents: 3200028, target_amount_cents: 10
 transactions = [
   # User1 transactions
   {
-    recipient_sender: "Whole Foods",
+    recipient_or_sender: "Whole Foods",
     amount_dollars: 85.25,
     category: "Groceries",
     transaction_type: "expense",
@@ -41,7 +41,7 @@ transactions = [
     user: user1
   },
   {
-    recipient_sender: "Freelance Payment",
+    recipient_or_sender: "Freelance Payment",
     amount_dollars: 1200.00,
     category: "General",
     transaction_type: "income",
@@ -50,7 +50,7 @@ transactions = [
   },
   # User2 transactions
   {
-    recipient_sender: "Netflix",
+    recipient_or_sender: "Netflix",
     amount_dollars: 15.99,
     category: "Entertainment",
     transaction_type: "expense",
@@ -58,7 +58,7 @@ transactions = [
     user: user2
   },
   {
-    recipient_sender: "Salary Deposit",
+    recipient_or_sender: "Salary Deposit",
     amount_dollars: 2500.00,
     category: "General",
     transaction_type: "income",

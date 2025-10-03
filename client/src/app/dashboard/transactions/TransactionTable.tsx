@@ -45,7 +45,7 @@ export default function TransactionTable({
         {transactions.map((transaction) => {
           const {
             id,
-            recipient_sender,
+            recipient_or_sender,
             category,
             transaction_date,
             transaction_type,
@@ -53,7 +53,7 @@ export default function TransactionTable({
           } = transaction;
           return (
             <TableRow key={id}>
-              <TableCell>{recipient_sender}</TableCell>
+              <TableCell>{recipient_or_sender}</TableCell>
               <TableCell>{category}</TableCell>
               <TableCell>{transaction_date}</TableCell>
               <TableCell

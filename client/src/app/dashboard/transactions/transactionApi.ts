@@ -36,11 +36,12 @@ export const createTransaction = async (
     body: JSON.stringify({
       transaction: {
         // Note the nested transaction object
-        recipient_sender: formData.recipient_sender,
+        recipient_or_sender: formData.recipient_or_sender,
         category: formData.category,
         transaction_date: formData.date,
         amount_dollars: parseFloat(formData.amount_dollars),
         transaction_type: formData.transaction_type,
+        recurring: formData.recurring,
       },
     }),
   });

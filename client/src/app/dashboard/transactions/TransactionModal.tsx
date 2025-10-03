@@ -32,6 +32,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import { CATEGORY_OPTIONS } from "./transactionTypes";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -47,11 +49,12 @@ export default function TransactionModal({
   const form = useForm<TransactionFormInput>({
     resolver: zodResolver(transactionFormSchema),
     defaultValues: {
-      recipient_sender: "",
+      recipient_or_sender: "",
       category: "General",
       date: new Date().toISOString().split("T")[0],
       amount_dollars: "",
       transaction_type: "expense",
+      recurring: false,
     },
   });
 
@@ -59,11 +62,12 @@ export default function TransactionModal({
     try {
       // Convert form values to the expected API format
       const formData: TransactionFormInput = {
-        recipient_sender: formValues.recipient_sender,
+        recipient_or_sender: formValues.recipient_or_sender,
         category: formValues.category,
         date: formValues.date,
         amount_dollars: formValues.amount_dollars, // As string from form
         transaction_type: formValues.transaction_type,
+        recurring: formValues.recurring,
       };
 
       await createTransaction(formData, token!);
@@ -97,7 +101,7 @@ export default function TransactionModal({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="recipient_sender"
+              name="recipient_or_sender"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Recipient/Sender</FormLabel>
@@ -190,6 +194,17 @@ export default function TransactionModal({
                 </FormItem>
               )}
             />
+            <RadioGroup defaultValue="false" className="flex">
+              <FormLabel>Recurring?</FormLabel>
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="true" id="r1" />
+                <Label htmlFor="r1">true</Label>
+              </div>
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="false" id="r2" checked />
+                <Label htmlFor="r2">false</Label>
+              </div>
+            </RadioGroup>
             <div className="flex justify-end gap-2">
               <Button
                 type="button"

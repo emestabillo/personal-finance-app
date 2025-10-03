@@ -20,6 +20,6 @@ class Api::V1::TransactionsController < ApplicationController
   private
 
   def transaction_params
-    params.require(:transaction).permit(:recipient_sender, :category, :transaction_date, :amount_dollars, :transaction_type)
+    params.require(:transaction).permit(:recipient_or_sender, :category, :transaction_date, :amount_dollars, :transaction_type, :recurring)
   end
 end
