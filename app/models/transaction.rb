@@ -9,7 +9,7 @@ class Transaction < ApplicationRecord
   CATEGORIES = [
     'Entertainment', 'Bills', 'Groceries', 'Dining Out', 'Transportation', 'Personal Care', 'General'].freeze
 
-  validates :recipient_sender, :transaction_date, :category, presence: true
+  validates :recipient_or_sender, :transaction_date, :category, presence: true
   validates :category, inclusion: {in: CATEGORIES}
   validates :transaction_type, presence: true
   
@@ -20,16 +20,6 @@ class Transaction < ApplicationRecord
 
   # Convert cents back to dollars for display
   def amount_dollars
-    amount_cents.to_f / 1000
-  end
-
-  # Signed amount for calculations (income: +, expense: -)
-  def signed_amount
-    income? ? amount : -amount
-  end
-
-  # Formatted display (e.g. "+$500.00" or "-$20.50")
-  def formatted amount
-    "#{income? ? '+' : '-'}#{amount.format}"
+    amount_cents.to_f / 100
   end
 end

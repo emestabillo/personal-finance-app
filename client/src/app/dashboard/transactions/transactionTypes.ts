@@ -17,33 +17,26 @@ export type TransactionCategory = (typeof CATEGORY_OPTIONS)[number]["value"];
 // For API responses (what you GET from server)
 export interface Transaction {
   id: number;
-  recipient_sender: string;
+  recipient_or_sender: string;
   category: TransactionCategory;
   transaction_date: string;
-  amount_cents: string;
+  amount_dollars: number;
   transaction_type: "income" | "expense";
-}
-
-// For form input values
-export interface TransactionFormInput {
-  recipient_sender: string;
-  category: TransactionCategory;
-  date: string;
-  amount_cents: string; // User enters as string (e.g., "10.99")
-  transaction_type: "income" | "expense";
+  recurring: boolean;
 }
 
 // For API request payload (POST to server)
 export interface TransactionCreatePayload {
-  recipient_sender: string;
+  recipient_or_sender: string;
   category: TransactionCategory;
   date: string;
-  amount_cents: number; // Converted to cents (e.g., 1099)
+  amount_dollars: number; // Converted to cents (e.g., 1099)
   transaction_type: "income" | "expense";
+  recurring: boolean;
 }
 
 export const transactionFormSchema = z.object({
-  recipient_sender: z.string().min(1, "Name is required"),
+  recipient_or_sender: z.string().min(1, "Name is required"),
   category: z.enum(
     [
       CATEGORY_OPTIONS[0].value,
@@ -52,11 +45,12 @@ export const transactionFormSchema = z.object({
     { required_error: "Please select a category" }
   ),
   date: z.string().min(1, "Date is required"),
-  amount_cents: z
+  amount_dollars: z
     .string()
     .min(1, "Amount is required")
     .regex(/^\d+(\.\d{1,2})?$/, "Must be a valid dollar amount"),
   transaction_type: z.enum(["income", "expense"]),
+  recurring: z.boolean().default(false),
 });
 
-export type TransactionFormValues = z.infer<typeof transactionFormSchema>;
+export type TransactionFormInput = z.infer<typeof transactionFormSchema>;
