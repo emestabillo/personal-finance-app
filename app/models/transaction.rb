@@ -22,14 +22,4 @@ class Transaction < ApplicationRecord
   def amount_dollars
     amount_cents.to_f / 100
   end
-
-  # Signed amount for calculations (income: +, expense: -)
-  def signed_amount
-    income? ? amount : -amount
-  end
-
-  # Formatted display (e.g. "+$500.00" or "-$20.50")
-  def formatted_amount
-    "#{income? ? '+' : '-'}#{amount.format}"
-  end
 end

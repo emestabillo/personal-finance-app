@@ -20,7 +20,7 @@ export interface Transaction {
   recipient_sender: string;
   category: TransactionCategory;
   transaction_date: string;
-  amount_dollars: string;
+  amount_dollars: number;
   transaction_type: "income" | "expense";
 }
 
