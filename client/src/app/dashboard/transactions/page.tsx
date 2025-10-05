@@ -1,15 +1,32 @@
 "use client";
-import { useState } from "react";
-import TransactionsClient from "@/app/dashboard/transactions/TransactionsClient";
+
+import useSWR from "swr";
+import { fetchTransactions } from "./transactionApi";
+import { useAuth } from "@/context/AuthContext";
+import TransactionTable from "./TransactionTable";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import TransactionModal from "./TransactionModal";
 
 export default function TransactionsPage() {
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const { token } = useAuth();
+
+  const {
+    data: transactions,
+    isLoading,
+    error,
+    mutate,
+  } = useSWR(
+    token ? ["transactions", token] : null,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ([_, token]) => fetchTransactions(token)
+  );
 
   const handleTransactionAdded = () => {
-    setRefreshTrigger((prev) => prev + 1);
+    mutate();
   };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>; // Fix error display
 
   return (
     <ProtectedRoute>
@@ -18,7 +35,7 @@ export default function TransactionsPage() {
           <h1 className="text-2xl font-bold">Transactions</h1>
           <TransactionModal onSuccess={handleTransactionAdded} />
         </header>
-        <TransactionsClient key={refreshTrigger} />
+        <TransactionTable transactions={transactions || []} />
       </div>
     </ProtectedRoute>
   );
