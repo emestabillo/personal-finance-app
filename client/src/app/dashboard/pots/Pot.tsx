@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { ManagePotFundsProps, DeletePotModalProps } from "./potTypes";
+import { PotComponentProps } from "./potTypes";
 
 export default function Pot({
   pot,
@@ -10,7 +10,9 @@ export default function Pot({
   setManagePotFundsModalIsOpen,
   showDeletePotModal,
   setShowDeletePotModal,
-}: ManagePotFundsProps & DeletePotModalProps) {
+  setAddOrEditModal,
+  setShowAddEditPot,
+}: PotComponentProps) {
   const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
   return (
     <div
@@ -34,7 +36,17 @@ export default function Pot({
               { "visible max-h-[10rem]": showOptionsDropdown }
             )}
           >
-            <button className="w-full">Edit pot</button>
+            <button
+              className="w-full"
+              onClick={() => {
+                setSelectedPot(pot);
+                setAddOrEditModal("edit"); // You need to pass this function to Pot
+                setShowAddEditPot(true); // You need to pass this function to Pot
+                setShowOptionsDropdown(false);
+              }}
+            >
+              Edit pot
+            </button>
             <button
               className="w-full"
               onClick={() => {

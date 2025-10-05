@@ -6,6 +6,19 @@ export interface PotProps {
   percentage_saved: number;
 }
 
+export interface PotComponentProps {
+  pot: PotProps;
+  setSelectedPot: (pot: PotProps) => void;
+  setActionType: (action: "add" | "withdraw") => void;
+  setManagePotFundsModalIsOpen: (managePotFundsModalIsOpen: boolean) => void;
+  showOptionsDropdown: boolean;
+  setShowOptionsDropdown: (show: boolean) => void;
+  showDeletePotModal: boolean;
+  setShowDeletePotModal: (show: boolean) => void;
+  setAddOrEditModal: (mode: "add" | "edit") => void;
+  setShowAddEditPot: (show: boolean) => void;
+}
+
 export interface ManagePotFundsProps {
   pot: PotProps;
   setSelectedPot: (pot: PotProps) => void;
