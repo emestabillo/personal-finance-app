@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import useSWR from "swr";
+import { useAuth } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { PotProps } from "./potTypes";
 import Pot from "./Pot";
@@ -10,8 +11,15 @@ import DeletePotModal from "./DeletePotModal";
 import AddEditPotModal from "./AddEditPot";
 
 export default function Page() {
-  const [pots, setPots] = useState<PotProps[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { token } = useAuth();
+  const {
+    data: pots,
+    isLoading,
+    error,
+    mutate,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } = useSWR(token ? ["pots", token] : null, ([_, token]) => fetchPots(token));
+
   const [showOptionsDropdown, setShowOptionsDropdown] = useState(false);
   const [selectedPot, setSelectedPot] = useState<PotProps | undefined>(
     undefined
@@ -25,68 +33,27 @@ export default function Page() {
   const [addOrEditModal, setAddOrEditModal] = useState<"add" | "edit">("add");
   const [colorTag, setColorTag] = useState("");
   const [targetAmount, setTargetAmount] = useState("");
-  const router = useRouter();
-
-  const fetchData = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setError("No authentication token found. Please log in.");
-      return;
-    }
-
-    try {
-      const pots = await fetchPots(token);
-      setPots(pots);
-    } catch (error) {
-      console.error("Error fetching pots:", error);
-      setError(error instanceof Error ? error.message : String(error));
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [router]);
 
   const handleAction = async () => {
     if (!selectedPot || amount <= 0) return;
 
-    const token = localStorage.getItem("token");
     if (!token) {
-      setError("No authentication token found. Please log in.");
+      console.error("No authentication token found. Please log in.");
       return;
     }
 
     try {
-      let response;
       if (actionType === "add") {
-        response = await addMoneyToPot(selectedPot.id, amount * 100, token);
+        await addMoneyToPot(selectedPot.id, amount * 100, token);
       } else {
-        response = await withdrawMoneyFromPot(
-          selectedPot.id,
-          amount * 100,
-          token
-        );
+        await withdrawMoneyFromPot(selectedPot.id, amount * 100, token);
       }
 
-      // Update the pots state with the new data
-      setPots(
-        (prevPots) =>
-          prevPots?.map((pot) =>
-            pot.id === selectedPot.id
-              ? {
-                  ...pot,
-                  total_saved: response.total_saved,
-                  percentage_saved: response.percentage_saved,
-                }
-              : pot
-          ) || null
-      );
-
+      mutate(); // Refresh data
       setManagePotFundsModalIsOpen(false);
       setAmount(0);
     } catch (error) {
       console.error("Error performing action:", error);
-      setError(error instanceof Error ? error.message : String(error));
     }
   };
 
@@ -94,13 +61,11 @@ export default function Page() {
     setShowAddEditPot(false);
     setTargetAmount("");
     setColorTag("");
-    fetchData(); // Refetch pots from the backend
+    mutate(); // Refresh data
   };
 
-  const handleDeleteSuccess = (deletedPotId: number) => {
-    setPots(
-      (prevPots) => prevPots?.filter((pot) => pot.id !== deletedPotId) || null
-    );
+  const handleDeleteSuccess = () => {
+    mutate(); // Refresh data
     setShowDeletePotModal(false);
     setSelectedPot(undefined);
   };
@@ -111,8 +76,8 @@ export default function Page() {
     setSelectedPot(undefined);
   };
 
-  if (error) return <div>Error: {error}</div>;
-  if (!pots) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <ProtectedRoute>
@@ -121,20 +86,22 @@ export default function Page() {
           <h1 className="text-2xl font-bold mb-4">Your Pots</h1>
           <button onClick={handleAddPotModal}>+ Add new pot</button>
         </div>
-        {pots.map((pot) => (
-          <Pot
-            key={pot.id}
-            pot={pot}
-            showOptionsDropdown={showOptionsDropdown}
-            setShowOptionsDropdown={setShowOptionsDropdown}
-            setSelectedPot={setSelectedPot}
-            setActionType={setActionType}
-            setManagePotFundsModalIsOpen={setManagePotFundsModalIsOpen}
-            showDeletePotModal={showDeletePotModal}
-            setShowDeletePotModal={setShowDeletePotModal}
-            onDeleteSuccess={() => handleDeleteSuccess(pot.id)}
-          />
-        ))}
+        {pots &&
+          pots.map((pot: PotProps) => (
+            <Pot
+              key={pot.id}
+              pot={pot}
+              showOptionsDropdown={showOptionsDropdown}
+              setShowOptionsDropdown={setShowOptionsDropdown}
+              setSelectedPot={setSelectedPot}
+              setActionType={setActionType}
+              setManagePotFundsModalIsOpen={setManagePotFundsModalIsOpen}
+              showDeletePotModal={showDeletePotModal}
+              setShowDeletePotModal={setShowDeletePotModal}
+              setAddOrEditModal={setAddOrEditModal}
+              setShowAddEditPot={setShowAddEditPot}
+            />
+          ))}
         <AddEditPotModal
           pot={selectedPot} // `selectedPot` can be `undefined`
           addOrEditModal={addOrEditModal}
@@ -161,7 +128,7 @@ export default function Page() {
             showDeletePotModal={showDeletePotModal}
             setShowDeletePotModal={setShowDeletePotModal}
             onDeleteSuccess={() => {
-              handleDeleteSuccess(selectedPot.id);
+              handleDeleteSuccess();
               setShowOptionsDropdown(false);
             }}
           />
