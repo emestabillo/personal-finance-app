@@ -20,6 +20,8 @@ Rails.application.routes.draw do
         end
       end
       resources :transactions, only: [:index, :create]
+      resources :budgets, only: [:index, :show, :create, :update, :destroy] do
+      end
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
